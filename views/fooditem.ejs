@@ -1,0 +1,129 @@
+<% layout("layout/boilerplate") %>
+
+<div id="cartToast" class="cart-toast"></div>
+
+<section class="food-page" style="--banner-image: url('<%= category.bannerImage %>')">
+
+  <h2 class="food-title">
+    --- <span class="food-text"><%= category.name.toUpperCase() %></span> ---
+  </h2>
+
+  <div class="food-list">
+
+    <% for (let item of foodItems) { %>
+
+      <div class="food-card <%= !item.isAvailable ? 'unavailable' : '' %>" data-id="<%= item._id %>">
+
+        <div class="food-info">
+          <p class="food-name"><%= item.name %></p>
+          <p class="food-price">Price: ₹<%= item.price %></p>
+          <% if (!item.isAvailable) { %>
+            <span class="unavailable-badge">
+              Currently Unavailable
+            </span>
+          <% } %>
+        </div>
+
+        <form 
+          action="/cart/add/<%= item._id %>?table=<%= tableNumber %>" 
+          method="POST"
+          onsubmit="setRedirectUrl(this);"
+        >
+          <input type="hidden" name="redirectTo">
+          <button 
+            class="add-btn"
+            <%= !item.isAvailable ? "disabled" : "" %>
+          >
+            ADD
+          </button>
+
+        </form>
+
+      </div>
+      
+    <% } %>
+
+  </div>
+
+</section>
+
+<script>
+  function setRedirectUrl(form) {
+    const itemName =
+      form.closest(".food-card").querySelector(".food-name").innerText;
+
+    localStorage.setItem("cartToast", itemName);  
+
+    form.querySelector('input[name="redirectTo"]').value =
+      window.location.pathname + window.location.search;
+  }
+</script>
+
+<script>
+  window.addEventListener("load", () => {
+
+    const itemName = localStorage.getItem("cartToast");
+
+    if (itemName) {
+
+      const toast = document.getElementById("cartToast");
+
+      toast.innerText = `${itemName} Added to Cart..!!`;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 1800);
+
+      localStorage.removeItem("cartToast");
+    }
+  });
+</script>
+
+<script>
+  async function refreshAvailability() {
+
+    const categoryName = "<%= category.name %>";
+
+    try {
+      const res = await fetch(`/menu/live/${categoryName}`);
+      const items = await res.json();
+
+      items.forEach(item => {
+
+        const card = document.querySelector(`[data-id="${item._id}"]`);
+        if (!card) return;
+
+        const button = card.querySelector(".add-btn");
+        let badge = card.querySelector(".unavailable-badge");
+
+        if (!item.isAvailable) {
+
+          card.classList.add("unavailable");
+
+          button.disabled = true;
+
+          if (!badge) {
+            badge = document.createElement("span");
+            badge.className = "unavailable-badge";
+            badge.innerText = "Currently Unavailable";
+
+            card.querySelector(".food-info").appendChild(badge); 
+          }
+
+        } else {
+          card.classList.remove("unavailable");
+          button.disabled = false;
+          if (badge) badge.remove();
+        }
+
+      });
+
+    } catch (err) {
+      console.log("Live update error", err);
+    }
+  }
+
+  setInterval(refreshAvailability, 3000);
+</script>

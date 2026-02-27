@@ -1,0 +1,229 @@
+.dashboard-page {
+  padding: 30px 40px;
+}
+
+.order-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.tab-btn {
+  border: none;
+  padding: 6px 22px;
+
+  border-radius: 20px;
+  background: transparent;
+
+  font-size: 17px;
+  font-weight: 500;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  background: #2d1b12;
+  color: #fffbe4;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.tab-btn:hover {
+  transform: scale(1.05);
+}
+
+.orders-container {
+  display: flex;
+  gap: 26px;
+  flex-wrap: wrap;
+}
+
+.order-card {
+  width: 340px;
+  height: 400px;   
+
+  background: #f1e0b9;
+  border-radius: 22px;
+  padding: 18px;
+
+  box-shadow:
+    0 10px 24px rgba(0,0,0,0.18),
+    0 2px 6px rgba(0,0,0,0.08);
+
+  display: flex;              
+  flex-direction: column;     
+
+  animation: cardFade 0.25s ease;
+}
+
+.order-card h3 {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 14px;
+  margin-top: 8px;
+}
+
+.order-items {
+  flex: 1;                 
+  overflow-y: auto;       
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  margin-bottom: 12px;
+  padding-right: 4px;      
+}
+
+.item-row {
+  background: #fffef1;
+  border-radius: 12px;
+  padding: 8px 10px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 15px;
+}
+
+.item-row p {
+  margin: 0;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.item-row span {
+  font-size: 15px;
+  font-weight:bolder;
+  /* opacity: 0.7; */
+}
+
+.qty-label {
+  font-size: 11px;
+  opacity: 0.5;   
+  font-weight: 100 !important;
+}
+
+.order-total {
+  text-align: center;
+  font-weight: 600;
+  margin: 12px 0;
+}
+
+.order-card form {
+  display: flex;
+  justify-content: center;   
+}
+
+.served-btn,
+.paid-btn {
+  width: 100px;
+  border: none;
+
+  padding: 8px;
+  border-radius: 14px;
+
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: all 0.18s ease;
+}
+
+.served-btn {
+  background: #2d1b12;
+  color: #fffbe4;
+}
+
+.paid-btn {
+  background: #28a745;
+  color: white;
+}
+
+.served-btn:hover,
+.paid-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.served-btn:active,
+.paid-btn:active {
+  transform: scale(0.96);
+}
+
+.no-orders {
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+.order-items::-webkit-scrollbar {
+  width: 6px;   
+}
+
+.order-items::-webkit-scrollbar-track {
+  background: transparent;   
+}
+
+.order-items::-webkit-scrollbar-thumb {
+  background: rgba(45, 27, 18, 0.35);  
+  border-radius: 20px;
+
+  transition: background 0.2s ease;
+}
+
+.order-items::-webkit-scrollbar-thumb:hover {
+  background: rgba(45, 27, 18, 0.6);
+}
+
+@keyframes cardFade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #2d1b12;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 18px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 9999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.enable-sound-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: #2d1b12;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.enable-sound-btn:hover {
+  background: #5b3926;
+}
+

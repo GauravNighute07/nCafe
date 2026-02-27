@@ -1,0 +1,205 @@
+<% layout("layout/boilerplate") %>
+
+<div id="cartToast" class="cart-toast"></div>
+
+<section class="food-page pizza-page page-transition">
+
+  <h2 class="pizza-title">
+    --- <span class="pizza-text">PIZZA</span> ---
+  </h2>
+
+  <div class="pizza-tabs">
+    <div class="pizza-tab active" data-sub="Simple Veggie">Simple Veggie</div>
+    <div class="pizza-tab" data-sub="Yummy Delight">Yummy Delight</div>
+    <div class="pizza-tab" data-sub="Signature">Signature</div>
+    <div class="pizza-tab" data-sub="Premium">Premium</div>
+    <div class="pizza-tab" data-sub="Mind Blowing">Mind Blowing</div>
+  </div>
+
+  <div class="food-list">
+
+    <% pizzas.forEach(pizza => { %>
+      <div 
+        class="food-card pizza-card <%= !pizza.isAvailable ? 'unavailable' : '' %>"  data-id="<%= pizza._id %>"
+        data-sub="<%= pizza.subcategory %>"
+      >
+
+        <div class="food-info">
+          <p class="food-name"><%= pizza.name %></p>
+          <p class="food-desc"><%= pizza.description %></p>
+
+          <div class="pizza-sizes">
+            <% pizza.sizes.forEach(size => { %>
+              <span 
+                class="pizza-size"
+                data-size="<%= size.label %>"
+                data-price="<%= size.price %>"
+              >
+                <%= size.label %><br>
+                ₹<%= size.price %>
+              </span>
+            <% }) %>
+          </div>
+          <% if (!pizza.isAvailable) { %>
+            <span class="unavailable-badge">
+              Currently Unavailable
+            </span>
+          <% } %>
+        </div>
+
+        <form 
+          action="/cart/add/<%= pizza._id %>?table=<%= tableNumber %>" 
+          method="POST"
+          class="pizza-form"
+          onsubmit="setPizzaRedirect(this)"
+        >
+          <input type="hidden" name="selectedSize">
+          <input type="hidden" name="price">
+          <input type="hidden" name="redirectTo">
+
+          <button 
+            class="add-btn-pizza"
+            <%= !pizza.isAvailable ? "disabled" : "disabled" %>
+          >
+            ADD
+          </button>
+
+        </form>
+
+      </div>
+    <% }) %>
+
+  </div>
+
+</section>
+
+<script>
+  const tabs = document.querySelectorAll(".pizza-tab");
+  const cards = document.querySelectorAll(".pizza-card");
+
+  const defaultSub = "Simple Veggie";
+  cards.forEach(card => {
+    card.style.display =
+      card.dataset.sub === defaultSub ? "flex" : "none";
+  });
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      const selected = tab.dataset.sub;
+
+      cards.forEach(card => {
+        card.style.display =
+          card.dataset.sub === selected ? "flex" : "none";
+      });
+    });
+  });
+</script>
+
+<script>
+  document.querySelectorAll(".pizza-card").forEach(card => {
+    const sizes = card.querySelectorAll(".pizza-size");
+    const form = card.querySelector(".pizza-form");
+    const addBtn = card.querySelector(".add-btn-pizza");
+
+    const sizeInput = form.querySelector("input[name='selectedSize']");
+    const priceInput = form.querySelector("input[name='price']");
+
+    sizes.forEach(size => {
+      size.addEventListener("click", () => {
+        sizes.forEach(s => s.classList.remove("selected"));
+        size.classList.add("selected");
+
+        sizeInput.value = size.dataset.size;
+        priceInput.value = size.dataset.price;
+
+        if (!card.classList.contains("unavailable")) {
+          addBtn.disabled = false;
+          addBtn.classList.add("enabled");
+        }
+        addBtn.classList.add("enabled");
+      });
+    });
+  });
+
+  function setPizzaRedirect(form) {
+    const itemName =
+      form.closest(".pizza-card").querySelector(".food-name").innerText;
+    localStorage.setItem("cartToast", itemName);   // ⭐ IMPORTANT
+    form.querySelector("input[name='redirectTo']").value =
+      window.location.pathname + window.location.search;
+  }
+
+</script>
+
+<script>
+  async function refreshPizzaAvailability() {
+
+    try {
+      const res = await fetch("/menu/live/Pizza");
+      const pizzas = await res.json();
+
+      pizzas.forEach(pizza => {
+
+        const card = document.querySelector(
+          `.pizza-card[data-id="${pizza._id}"]`
+        );
+        if (!card) return;
+
+        const button = card.querySelector(".add-btn-pizza");
+        let badge = card.querySelector(".unavailable-badge");
+
+        if (!pizza.isAvailable) {
+
+          card.classList.add("unavailable");
+          button.disabled = true;
+
+          if (!badge) {
+            badge = document.createElement("span");
+            badge.className = "unavailable-badge";
+            badge.innerText = "Currently Unavailable";
+            card.querySelector(".food-info").appendChild(badge);
+          }
+
+        } else {
+
+          card.classList.remove("unavailable");
+          button.disabled = false;
+
+          if (badge) badge.remove();
+        }
+
+      });
+
+    } catch (err) {
+      console.log("Pizza live error", err);
+    }
+  }
+
+  setInterval(refreshPizzaAvailability, 3000);
+</script>
+
+<script>
+  window.addEventListener("load", () => {
+
+    const itemName = localStorage.getItem("cartToast");
+
+    if (itemName) {
+
+      const toast = document.getElementById("cartToast");
+
+      toast.innerText = `${itemName} Added to Cart..!!`;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 1800);
+
+      localStorage.removeItem("cartToast");
+    }
+  });
+</script>
+

@@ -1,0 +1,98 @@
+<% layout("layout/boilerplate") %>
+
+<section class="cart-page">
+
+  <h2 class="cart-title">
+    --- <span class="cart-text">YOUR CART</span> 🛒 ---
+  </h2>
+
+  <div class="cart-box">
+
+    <% if (!cart || cart.items.length === 0) { %>
+      <p class="empty-cart">Your cart is empty</p>
+    <% } else { %>
+
+      <% cart.items.forEach(item => { %>
+
+        <div class="cart-item">
+
+          <div class="cart-item-top">
+
+            <p class="item-name">
+              <%= item.name %>
+              <% if (item.selectedSize) { %>
+                <span class="item-size">[<%= item.selectedSize %>]</span>
+              <% } %>
+            </p>
+
+            <div class="price-qty">
+              <p class="item-price">₹ <%= item.price  * item.quantity %></p>
+              <div class="qty-box">   
+                <form 
+                    action="/cart/update/<%= item._id %>?table=<%= tableNumber %>" 
+                    method="POST"
+                >
+                    <input type="hidden" name="action" value="decrease">
+                    <button class="qty-btn">−</button>
+                </form>
+                <span class="qty-count"><%= item.quantity %></span>
+                <form 
+                    action="/cart/update/<%= item._id %>?table=<%= tableNumber %>" 
+                    method="POST"
+                >
+                    <input type="hidden" name="action" value="increase">
+                    <button class="qty-btn">+</button>
+                </form>
+               </div>
+            </div>
+          </div>
+
+        </div>
+
+      <% }) %>
+
+      <div class="cart-footer">
+
+        <form action="/cart/clear?table=<%= tableNumber %>" method="POST">
+            <button class="clear-cart-btn">Clear Cart</button>
+        </form>
+
+        <div class="cart-total">
+            Total : ₹ <span><%= cart.totalAmount %></span>
+        </div>
+
+      </div>
+
+      <form action="/order/place?table=<%= tableNumber %>" method="POST">
+          <button class="place-order-btn">Place Order</button>
+      </form>
+
+      <p class="continue-text">
+        --- <a href="/menu?table=<%= tableNumber %>">Continue Ordering</a> ---
+      </p>
+
+    <% } %>
+
+  </div>
+
+  <div id="order-popup" class="order-popup">
+      Order Placed Successfully..!!
+  </div>
+
+</section>
+
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const popup = document.getElementById("order-popup");
+
+  if (params.get("order") === "success") {
+    popup.classList.add("show");
+
+    setTimeout(() => {
+      popup.classList.remove("show");
+    }, 2000);
+  }
+</script>
+
+

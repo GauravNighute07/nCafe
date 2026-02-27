@@ -1,0 +1,111 @@
+.menu-page {
+  padding: 14px;
+  background: #fffff1;
+}
+
+.menu-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  margin-top: 18px;
+  margin-bottom: 28px;
+  color: #39251b;
+}
+.menu-title .menu-text {
+  font-family: 'Alice', serif;
+  font-weight: 800;   
+  letter-spacing: 0.5px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 24px;   
+  row-gap: 30px;      
+  justify-items: center;
+  padding: 0 14px;
+}
+
+.category-card {
+  background: #fffbe4;
+  width: 150px;
+  height: 170px;
+  border-radius: 18px;
+  padding: 10px;
+  text-decoration: none;
+  color: #39251b;
+
+  box-shadow: 4px 4px 0 rgba(57, 37, 27, 0.7) ;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.12s ease;
+  animation: cardFade 0.25s ease both;
+}
+.category-card:active {
+  transform: scale(0.96);
+}
+
+.category-image-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.12s ease;
+}
+.category-card:active .category-image-wrapper img {
+  transform: scale(0.98);
+}
+
+.category-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.category-name {
+  font-family: 'Archivo Black', sans-serif;
+  margin-top:3px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  letter-spacing: 0.8px;
+}
+
+@media (max-width: 360px) {
+  .category-grid {
+    gap: 12px;
+  }
+
+  .category-name {
+    font-size: 13px;
+  }
+}
+
+.page-transition {
+  animation: pageFade 0.3s ease;
+}
+
+@keyframes pageFade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardFade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

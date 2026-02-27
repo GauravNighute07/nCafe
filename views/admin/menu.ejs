@@ -1,0 +1,105 @@
+<% layout("layout/admin") %>
+
+<section class="admin-menu-page">
+
+  <div class="admin-menu-left">
+
+    <h3 class="admin-menu-title">CATEGORIES</h3> 
+
+    <% categories.forEach(cat => { %>
+
+      <a 
+        href="/admin/menu/<%= cat.slug %>"
+        class="admin-category-card <%= activeCategory.slug === cat.slug ? 'active' : '' %>"
+      >
+        <img src="<%= cat.menuImage %>">
+        <span><%= cat.name %></span>
+      </a>
+
+    <% }) %>
+
+  </div>
+
+  <div class="admin-menu-right">
+
+    <h3 class="admin-items-title">
+      <%= activeCategory.name.toUpperCase() %>
+    </h3>
+
+    <input 
+      type="text" 
+      id="menu-search"
+      class="admin-search"
+      placeholder="Search item..."
+    >
+
+    <div class="admin-items-list">
+
+      <% items.forEach(item => { %>
+
+        <div class="admin-item-row" data-name="<%= item.name %>">
+
+          <span class="admin-item-name">
+            <%= item.name %>
+          </span>
+
+          <div class="admin-actions">
+
+            <form action="/admin/food/<%= item._id %>/toggle" method="POST">
+              <input type="hidden" name="action" value="available">
+              <input type="hidden" name="categorySlug" value="<%= activeCategory.slug %>">
+
+              <button 
+                class="available-btn"
+                <%= item.isAvailable ? "disabled" : "" %>
+              >
+                Available
+              </button>
+            </form>
+
+            <form action="/admin/food/<%= item._id %>/toggle" method="POST">
+              <input type="hidden" name="action" value="unavailable">
+              <input type="hidden" name="categorySlug" value="<%= activeCategory.slug %>">
+
+              <button 
+                class="unavailable-btn"
+                <%= !item.isAvailable ? "disabled" : "" %>
+              >
+                Unavailable
+              </button>
+            </form>
+
+          </div>
+
+        </div>
+
+      <% }) %>
+
+    </div>
+
+  </div>
+
+</section>
+
+<script>
+  const searchInput = document.getElementById("menu-search");
+  const rows = document.querySelectorAll(".admin-item-row");
+
+  searchInput.addEventListener("input", () => {
+
+    const value = searchInput.value.toLowerCase();
+
+    rows.forEach(row => {
+
+      const name = row.dataset.name.toLowerCase();
+
+      if (name.includes(value)) {
+        row.style.display = "flex";
+      } else {
+        row.style.display = "none";
+      }
+
+    });
+
+  });
+</script>

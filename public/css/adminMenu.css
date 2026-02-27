@@ -1,0 +1,133 @@
+.admin-menu-page {
+  display: flex;
+  gap: 40px;
+  padding: 30px 40px;
+}
+
+.admin-menu-left {
+  width: 300px;
+}
+
+.admin-menu-title {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.admin-category-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 250px;
+  height: 120px;
+  font-size: 17px;
+  font-family: 'Poppins', sans-serif;
+
+  text-decoration: none;
+  color: #2d1b12;
+  background-color: #fffbe4;
+
+  padding: 10px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+
+  transition: 0.2s;
+}
+
+.admin-category-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.admin-category-card:hover {
+  background: #f1e0b9;
+}
+
+.admin-category-card.active {
+  background: #2d1b12;
+  color: #fffbe4;
+}
+
+.admin-menu-right {
+  flex: 1;
+}
+
+.admin-items-title {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.admin-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+
+.admin-item-row {
+  background: #f1e0b9;
+  padding: 12px 18px;
+  border-radius: 16px;
+  width: 900px;
+  height: 70px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-item-name {
+  font-weight: 500;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.available-btn,
+.unavailable-btn {
+  border: none;
+  padding: 5px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.available-btn {
+  background: #2d1b12;
+  color: #fffbe4;
+}
+
+.unavailable-btn {
+  background: #2d1b12;
+  color: #fffbe4;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+
+.admin-search {
+  display: block;
+  margin: 0 auto 20px auto;
+  width: 300px;
+
+  padding: 6px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(45,27,18,0.2);
+  background-color: #fffff1;
+
+  font-size: 16px;
+  outline: none;
+}
+
+.admin-search:focus {
+  border-color: #2d1b12;
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <section class="admin-login-page">
+
+        <div class="login-card">
+
+            <h2>Log In</h2>
+
+            <form action="/admin/login" method="POST">
+
+            <label>Username:</label>
+            <input type="text" name="username" placeholder="--- Enter username ---" required />
+
+            <label>Password:</label>
+            <input type="password" name="password" placeholder="--- Enter password ---" required />
+
+            <button type="submit">Log In</button>
+
+            </form>
+
+        </div>
+
+        <div id="login-popup" class="login-popup">
+            Invalid Credentials
+        </div>
+
+    </section>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const popup = document.getElementById("login-popup");
+
+        if (params.get("error") === "invalid") {
+            popup.classList.add("show");
+
+            setTimeout(() => {
+            popup.classList.remove("show");
+            }, 2000);
+        }
+        </script>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<nav class="ncafe-navbar">
+
+  <div class="brand">
+    <a href="/menu?table=<%= tableNumber %>">
+      <img src="/images/logo.png" class="nav-logo" alt="N'Cafe">
+    </a>
+  </div>
+
+  <hr />
+
+  <div class="nav-bottom">
+    <div class="left-icons">
+        <a href="/menu?table=<%= tableNumber %>" class="icon-btn">
+            <i class="bi bi-house-fill"></i>
+        </a>
+
+        <div class="search-box">
+            <input 
+              type="text" 
+              placeholder="Search food..."
+              id="food-search"
+            />
+            <span class="search-icon">
+              <i class="bi bi-search"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="right-icons">
+      <a href="/cart?table=<%= tableNumber %>" class="icon-btn cart-icon">
+        <i class="fa-solid fa-cart-shopping"></i>
+
+        <% if (cartCount > 0) { %>
+          <span class="cart-badge"><%= cartCount %></span>
+        <% } %>
+      </a>
+
+      <a href="#" class="icon-btn">
+        <i class="bi bi-person-fill" style="font-size: 20px;"></i>
+      </a>
+    </div>
+
+  </div>
+</nav>
+
+

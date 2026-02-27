@@ -1,0 +1,166 @@
+.food-page {
+  position: relative;
+  padding: 14px;
+  background: #fffff1;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.food-page::before {
+  content: "";
+  position: fixed;          
+  top: 200px;               
+  left: -50px;
+
+  width: 380px;
+  height: 400px;
+
+  background-image: var(--banner-image);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left center;
+
+  opacity: 0.45;
+  z-index: 0;
+  pointer-events: none;     
+}
+
+.food-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.food-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  margin-top: 18px;
+  margin-bottom: 30px;
+  color: #39251b;
+}
+.food-title .food-text {
+  font-family: 'Alice', serif;
+  font-weight: 800;   
+  letter-spacing: 0.5px;
+}
+
+.food-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-left: 80px; 
+}
+
+.food-card {
+  background: #fff8d4;
+  border-radius: 16px;
+  padding: 12px 14px;
+  max-width: 280px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  box-shadow: 0 6px 14px rgba(57, 37, 27, 0.2);
+
+  transition: transform 0.12s ease;
+}
+
+.food-card:active {
+  transform: scale(0.97);
+}
+
+.food-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.food-name {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #39251b;
+}
+
+.food-price {
+  margin: 0;
+  font-size: 12px;
+  color: #39251b;
+  opacity: 0.8;
+}
+
+.add-btn {
+  background: #52371b;
+  color: #fffbe4;
+  border: none;
+  border-radius: 18px;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+
+  transition: transform 0.12s ease;
+}
+
+.add-btn:active {
+  transform: scale(0.95);
+}
+
+.food-card.unavailable {
+  opacity: 0.45;
+  filter: grayscale(40%);
+}
+
+.unavailable-badge {
+  display: inline-block;
+  margin-top: 6px;
+  width: 140px;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  background: #2d1b12;
+  color: #fffbe4;
+
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cart-toast {
+  position: fixed;
+  top: 0;
+  left: 40px;
+  width: 80%;
+  border-radius: 20px;
+
+  background: #fffbe4;
+  color: #2d1b12;
+
+  text-align: center;
+  padding: 12px;
+
+  font-size: 16px;
+  font-weight: 500;
+
+  transform: translateY(-100%);
+  transition: transform 0.25s ease;
+
+  z-index: 9999;
+}
+
+.cart-toast.show {
+  transform: translateY(0);
+}
+
+
+
+
+

@@ -1,0 +1,195 @@
+<% layout("layout/admin") %>
+
+<section class="dashboard-page">
+
+  <div class="order-tabs">
+    <button class="tab-btn active" data-tab="pending">Pending</button>
+    <button class="tab-btn" data-tab="served">Served</button>
+  </div>
+
+  <div class="orders-container pending-orders" id="pending-orders">
+
+    <% if (pendingOrders.length === 0) { %>
+      <p class="no-orders">No Pending Orders</p>
+    <% } %>
+
+    <% pendingOrders.forEach(order => { %>
+
+      <div class="order-card">
+
+        <h3>TABLE : <%= order.tableNumber %></h3>
+        
+        <div class="order-items">
+          <% order.items.forEach(item => { %>
+            <div class="item-row">
+              <div>
+                <p><%= item.name %>
+                  <% if (item.selectedSize) { %>
+                    [<%= item.selectedSize %>]
+                  <% } %>
+                </p>
+                <span class="qty-label">Quantity : </span><span><%= item.quantity %></span>
+              </div>
+
+              <span>₹ <%= item.price * item.quantity %></span>
+            </div>
+          <% }) %>
+        </div>
+
+        <p class="order-total">Total : ₹ <%= order.totalAmount %></p>
+
+        <form action="/admin/order/<%= order._id %>/status" method="POST">
+          <input type="hidden" name="status" value="Served">
+          <button class="served-btn">Served</button>
+        </form>
+
+      </div>
+
+    <% }) %>
+
+  </div>
+
+  <div class="orders-container served-orders"  id="served-orders" style="display:none;">
+
+    <% if (servedOrders.length === 0) { %>
+      <p class="no-orders">No Served Orders</p>
+    <% } %>
+
+    <% servedOrders.forEach(order => { %>
+
+      <div class="order-card">
+
+        <h3>TABLE : <%= order.tableNumber %></h3>
+
+        <div class="order-items">
+          <% order.items.forEach(item => { %>
+            <div class="item-row">
+              <div>
+                <p><%= item.name %>
+                  <% if (item.selectedSize) { %>
+                    [<%= item.selectedSize %>]
+                  <% } %>
+                </p>
+                <span class="qty-label">Quantity : </span><span><%= item.quantity %></span>
+              </div>
+
+              <span>₹ <%= item.price * item.quantity %></span>
+            </div>
+          <% }) %>
+        </div>
+
+        <p class="order-total">Total : ₹ <%= order.totalAmount %></p>
+
+        <form action="/admin/order/<%= order._id %>/status" method="POST">
+          <input type="hidden" name="status" value="Paid">
+          <button class="paid-btn">Paid</button>
+        </form>
+
+      </div>
+
+    <% }) %>
+
+  </div>
+
+  <button id="enableSoundBtn" class="enable-sound-btn">
+    🔔 Enable Notifications
+  </button>
+
+  <div id="toast" class="toast">New Order Received ☕</div>
+
+</section>
+
+
+<script>
+  const tabs = document.querySelectorAll(".tab-btn");
+  const pending = document.querySelector(".pending-orders");
+  const served = document.querySelector(".served-orders");
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+
+      tabs.forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      if (tab.dataset.tab === "pending") {
+        pending.style.display = "flex";
+        served.style.display = "none";
+      } else {
+        pending.style.display = "none";
+        served.style.display = "flex";
+      }
+    });
+  });
+</script>
+
+<audio id="dingSound" src="/sound/ding.mp3"></audio>
+
+<script>
+  const btn = document.getElementById("enableSoundBtn");
+  const sound = document.getElementById("dingSound");
+
+  if (localStorage.getItem("soundEnabled")) {
+    btn.style.display = "none";
+  }
+
+  btn.addEventListener("click", () => {
+    sound.play().then(() => {
+      sound.pause();
+      sound.currentTime = 0;
+      localStorage.setItem("soundEnabled", "true");
+      btn.style.display = "none";
+      // console.log("Notifications enabled 🔔");
+    });
+  });
+</script>
+
+<script>
+  let lastHTML = "";
+  let firstLoad = true; 
+
+  async function refreshOrders() {
+    try {
+      const res = await fetch("/admin/dashboard/live");
+      const html = await res.text();
+
+      if (html === lastHTML) {
+        return;
+      }
+
+      if (!firstLoad) {
+        document.getElementById("dingSound").play();
+        showToast();
+      }
+
+      firstLoad = false;
+
+      lastHTML = html;
+
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+
+      const newPending = doc.getElementById("pending-orders");
+      const newServed = doc.getElementById("served-orders");
+
+      document.getElementById("pending-orders").innerHTML = newPending.innerHTML;
+      document.getElementById("served-orders").innerHTML = newServed.innerHTML;
+
+    } catch (err) {
+      console.log("Refresh error:", err);
+    }
+  }
+
+  setInterval(refreshOrders, 5000);
+</script>
+
+<script>
+  function showToast() {
+    const toast = document.getElementById("toast");
+
+    toast.classList.add("show");
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 2000);
+  }
+</script>
